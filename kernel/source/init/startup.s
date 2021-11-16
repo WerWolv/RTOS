@@ -44,5 +44,7 @@ entry:
         cmp r2, r4
         bcc fill_bss_set
 
+	bl __libc_init_array
+
     bl kern_main
     bx lr

@@ -7,6 +7,7 @@ size = '/usr/bin/llvm-size'
 ld = '/usr/bin/llvm-ld.lld'
 objdump = '/usr/bin/llvm-objdump'
 strip = '/usr/bin/llvm-strip'
+exe_wrapper = 'echo'
 
 [properties]
 sys_root = '@SYSROOT@'

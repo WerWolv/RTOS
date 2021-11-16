@@ -1,6 +1,7 @@
 #include <kern.hpp>
 
 #include <kern/container/linked_list.hpp>
+#include <kern/scheduler/scheduler.hpp>
 
 #include <hw/stm32f7/uart.hpp>
 
@@ -8,24 +9,47 @@ extern "C" void default_handler() {
     while (true);
 }
 
+extern "C" void nmi_handler() {
+    while (true);
+}
+
+extern "C" void hard_fault_handler() {
+    while (true);
+}
+
+extern "C" void mem_manage_handler() {
+    while (true);
+}
+
+extern "C" void bus_fault_handler() {
+    while (true);
+}
+
+extern "C" void usage_fault_handler() {
+    while (true);
+}
+
+extern "C" void svc_handler() {
+    while (true);
+}
+
+alignas(8) static u8 stack1[0x200 * 8];
+alignas(8) static u8 stack2[0x200 * 8];
+
 extern "C" void kern_main() {
-    os::kern::cont::List<u32> list;
+	hw::uart::init();
 
-    list.push_back(1);
-    list.push_back(2);
-    list.push_back(3);
-    list.push_back(4);
+	os::kern::sched::add_task([] {
+			hw::uart::write("Executing Task 1\n\r");
 
-    u32 x = 0;
+			os::kern::sched::yield();
+	}, stack1, sizeof(stack1));
 
-    hw::uart::init();
+	os::kern::sched::add_task([] {
+			hw::uart::write("Executing Task 2\n\r");
+	}, stack2, sizeof(stack1));
 
-    for (u32 value : list) {
-        hw::uart::write('0' + value);
-        x += value;
-    }
-
-    asm volatile("" : : "r,m"(x) : "memory");
+	os::kern::sched::start();
 
     while (true);
 }

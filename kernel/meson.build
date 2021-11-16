@@ -1,6 +1,6 @@
 project('kernel', [ 'c', 'cpp' ],
   version : '0.1',
-  default_options: ['c_std=c17', 'cpp_std=c++20'])
+  default_options: ['c_std=c17', 'cpp_std=c++2a'])
 
 cc = meson.get_compiler('cpp')
 assert(cc.get_id() == 'clang', 'This project only support the Clang compiler.')

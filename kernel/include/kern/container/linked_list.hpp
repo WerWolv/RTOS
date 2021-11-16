@@ -4,14 +4,6 @@
 
 namespace os::kern::cont {
 
-    inline void test() {
-        u32 x = 0;
-
-        x += 5 % 7;
-
-        asm volatile("" : : "r,m"(x) : "memory");
-    }
-
     template<typename T>
     struct ListNode {
         T value;
@@ -21,12 +13,21 @@ namespace os::kern::cont {
 
     template<typename T>
     struct ListIterator {
-        ListIterator(ListNode<T> *node) : m_node(node) { }
+        using value_type = T;
+        using difference_type = std::ptrdiff_t;
 
         constexpr auto& operator++() {
             this->m_node = this->m_node->next;
 
             return *this;
+        }
+
+        constexpr auto operator++(int) {
+            const auto copy = *this;
+            
+            ++(*this);
+
+            return copy;
         }
 
         constexpr auto& operator--() {
@@ -35,28 +36,32 @@ namespace os::kern::cont {
             return *this;
         }
 
-        constexpr auto& operator*() {
+        constexpr auto operator--(int) {
+            const auto copy = *this;
+
+            --(*this);
+
+            return copy;
+        }
+
+        constexpr auto& operator*() const {
             return this->m_node->value;
         }
 
-        constexpr auto& operator->() {
-            return this->m_node->value;
+        constexpr auto operator->() const {
+            return std::addressof(this->m_node->value);
         }
 
-        constexpr bool operator==(const ListIterator<T> &other) const {
-            return this->m_node == other.m_node;
-        }
-
-        constexpr bool operator!=(const ListIterator<T> &other) const {
-            return this->m_node != other.m_node;
-        }
+        constexpr auto operator <=>(const ListIterator &other) const = default;
 
     private:
-        ListNode<T> *m_node;
+        ListNode<T> *m_node = nullptr;
     };
 
     template<typename T>
     struct List {
+        using iterator = ListIterator<T>;
+
         constexpr T& push_back(const T &value) {
             auto node = allocator.allocate();
 
@@ -94,17 +99,16 @@ namespace os::kern::cont {
             }
         }
 
-        constexpr ListIterator<T> begin() {
-            return ListIterator<T>(front);
+        constexpr iterator begin() {
+            return iterator{ front };
         }
 
-        constexpr ListIterator<T> end() {
-            return ListIterator<T>(nullptr);
+        constexpr iterator end() {
+            return iterator{ nullptr };
         }
-
 
         ListNode<T> *front = nullptr, *back = nullptr;
-        mem::Allocator<ListNode<T>, 128> allocator;
+        Allocator<ListNode<T>, 128> allocator;
     };
 
 }

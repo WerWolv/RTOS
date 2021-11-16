@@ -29,7 +29,6 @@ namespace os::kern::sched {
 	}
 
 	extern "C"
-	[[gnu::naked]]
 	void pend_sv_handler() {
 		do_context_switch();
 	}

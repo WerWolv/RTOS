@@ -4,6 +4,8 @@
 #include <kern/scheduler/scheduler.hpp>
 
 #include <hw/stm32f7/uart.hpp>
+#include <hw/stm32f7/stm32f769xx.h>
+
 
 extern "C" void default_handler() {
     while (true);

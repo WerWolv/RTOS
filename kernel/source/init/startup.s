@@ -48,3 +48,38 @@ entry:
 
     bl kern_main
     bx lr
+
+__libc_init_array:
+    ldr r0, =__preinit_array_start
+    ldr r1, =__preinit_array_end
+    sub r1, r1, r0
+
+    preinit_array_loop:
+        cmp r1, #0
+        beq preinit_array_done
+
+        ldr r3, [r0]
+        add r2, r0, r1
+        sub r1, r1, #4
+        bx r3
+        b preinit_array_loop
+
+    preinit_array_done:
+
+    ldr r0, =__init_array_start
+    ldr r1, =__init_array_end
+    sub r1, r1, r0
+
+    init_array_loop:
+        cmp r1, #0
+        beq init_array_done
+
+        ldr r3, [r0]
+        add r2, r0, r1
+        sub r1, r1, #4
+        bx r3
+        b init_array_loop
+
+    init_array_done:
+
+    bx lr

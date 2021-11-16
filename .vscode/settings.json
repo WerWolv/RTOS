@@ -5,5 +5,7 @@
         "iterator": "cpp",
         "new": "cpp",
         "type_traits": "cpp"
-    }
+    },
+    "cortex-debug.variableUseNaturalFormat": false,
+    "cortex-debug.registerUseNaturalFormat": false
 }

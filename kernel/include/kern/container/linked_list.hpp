@@ -14,7 +14,9 @@ namespace os::kern::cont {
     template<typename T>
     struct ListIterator {
         using value_type = T;
-        using difference_type = std::ptrdiff_t;
+        using difference_type = ptrdiff_t;
+
+        ListIterator(ListNode<T> *node) : m_node(node) { }
 
         constexpr auto& operator++() {
             this->m_node = this->m_node->next;
@@ -49,10 +51,11 @@ namespace os::kern::cont {
         }
 
         constexpr auto operator->() const {
-            return std::addressof(this->m_node->value);
+            return &this->m_node->value;
         }
 
-        constexpr auto operator <=>(const ListIterator &other) const = default;
+        constexpr bool operator==(const ListIterator &other) const = default;
+        constexpr bool operator!=(const ListIterator &other) const = default;
 
     private:
         ListNode<T> *m_node = nullptr;
@@ -108,7 +111,7 @@ namespace os::kern::cont {
         }
 
         ListNode<T> *front = nullptr, *back = nullptr;
-        Allocator<ListNode<T>, 128> allocator;
+        mem::Allocator<ListNode<T>, 128> allocator;
     };
 
 }

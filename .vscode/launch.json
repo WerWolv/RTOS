@@ -11,35 +11,8 @@
             "name": "Debug Microcontroller",
             "request": "launch",
             "type": "cortex-debug",
-            "servertype": "stutil",
-            "device": "STM32FH743ZI",
-            "serverArgs": [ "-v50", "--connect-under-reset", "--freq=1M" ],
-            "runToEntryPoint": "kern_main",
-            "swoConfig": {
-                "enabled": true,
-                "cpuFrequency": 16000000,
-                "swoFrequency": 4000000,
-                "source": "probe",
-                "decoders": [
-                    {
-                        "label": "ITM port 0 output",
-                        "type": "console",
-                        "port": 0,
-                        "showOnStartup": true,
-                        "encoding": "ascii"
-                    }
-                ]
-            }
-        },
-        {
-            "preLaunchTask": "build",
-            "cwd": "${workspaceRoot}",
-            "executable": "./kernel/build/kernel",
-            "name": "OpenOCD Microcontroller",
-            "request": "launch",
-            "type": "cortex-debug",
             "servertype": "openocd",
-            "device": "STM32FH743ZI",
+            "device": "STM32F769BGT6",
             "openOCDPreConfigLaunchCommands": [
                 "gdb_flash_program enable"
             ],

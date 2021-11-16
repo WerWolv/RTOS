@@ -4,6 +4,12 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "setup",
+            "type": "shell",
+            "command": "cd kernel && meson setup build --cross-file=../arm32",
+
+        },
+        {
             "label": "build",
             "type": "shell",
             "command": "meson compile -C kernel/build"

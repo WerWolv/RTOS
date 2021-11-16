@@ -12,14 +12,16 @@ kernel_sources = [
 
     'source/main.cpp',
 
-    'source/hw/stm32f7/uart.cpp'
+    'source/hw/stm32f7/uart.cpp',
+
+    'source/scheduler/scheduler.cpp'
 ]
 
 includes = include_directories('include')
 
-c_flags = [ '-target', 'arm-none-linux', '-Wall', '-g', '-Og', '-ffreestanding', '-nostdlib', '-mcpu=cortex-m7', '-mthumb', '-mfloat-abi=hard', '-Wno-unused-command-line-argument', '-fno-stack-protector', '-no-pie']
+c_flags = [ '-target', 'arm-none-linux', '-Wall', '-g', '-O0', '-nostdlib', '-mcpu=cortex-m7', '-mthumb', '-mfloat-abi=hard', '-Wno-unused-command-line-argument', '-fno-stack-protector', '-no-pie', '-Wno-deprecated-volatile' ]
 cpp_flags = c_flags + ['-fno-rtti' , '-fomit-frame-pointer',  '-fno-exceptions', '-fno-asynchronous-unwind-tables', '-fno-unwind-tables']
-link_args = ['-fuse-ld=lld', '-Wl,-T', meson.current_source_dir() + '/linker.ld', '-target', 'arm-none-linux', '-mfloat-abi=hard', '-ffreestanding', '-nostdlib', '-nodefaultlibs', '-no-pie']
+link_args = ['-fuse-ld=lld', '-Wl,-T', meson.current_source_dir() + '/linker.ld', '-target', 'arm-none-linux', '-mfloat-abi=hard', '-nostdlib', '-nodefaultlibs', '-no-pie']
 
 message(meson.current_source_dir())
 
